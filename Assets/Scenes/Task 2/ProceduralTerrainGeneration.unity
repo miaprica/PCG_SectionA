@@ -438,14 +438,15 @@ MonoBehaviour:
   terrainTextureBlendOffset: 0.1
   treeData:
   - treePrefab: {fileID: 114418, guid: be878d9ea17907f4a8068678a5ce7908, type: 3}
-    minHeight: 0
+    minHeight: 0.35
     maxHeight: 0.7
   - treePrefab: {fileID: 114418, guid: 8b2d47fdc2e25ac4f9721480a68bbefa, type: 3}
-    minHeight: 0
+    minHeight: 0.35
     maxHeight: 0.5
   maxTrees: 10000
   treeSpacing: 10
-  addTrees: 1
   terrainLayerIndex: 8
-  water: {fileID: 0}
-  waterHeight: 0.3
+  addTrees: 1
+  water: {fileID: 100006, guid: b544816461f324e56a39767fdeb5b114, type: 3}
+  waterHeight: 0.35
+  addWater: 1
