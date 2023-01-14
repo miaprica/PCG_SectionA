@@ -4,14 +4,21 @@ using UnityEngine;
 
 [System.Serializable]
 
-public class TerrainTextureData {
-
+public class TerrainTextureData 
+{
     public Texture2D terrainTexture;
     public Vector2 tileSize;
     public float minHeight;
     public float maxHeight;
 }
 
+[System.Serializable]
+public class TreeData
+{
+    public GameObject treePrefab;
+    public float minHeight;
+    public float maxHeight;
+}
 
 public class GenerateRandomHeight : MonoBehaviour
 {
@@ -31,7 +38,7 @@ public class GenerateRandomHeight : MonoBehaviour
 
     [Header("Perlin Noise")]
     [SerializeField]
-    private bool perlinNoise = false;
+    private bool perlinNoise = true;
 
     [SerializeField]
     private float perlinNoiseWidthScale = 0.01f;
@@ -44,10 +51,33 @@ public class GenerateRandomHeight : MonoBehaviour
     private List<TerrainTextureData> terrainTextureData;
 
     [SerializeField]
-    private bool addTerrainTexture = false;
+    private bool addTerrainTexture = true;
 
     [SerializeField]
     private float terrainTextureBlendOffset = 0.01f;
+
+    [Header("TreeData")]
+    [SerializeField]
+    private List<TreeData> treeData;
+
+    [SerializeField]
+    private int maxTrees = 2000;
+
+    [SerializeField]
+    private int treeSpacing = 10;
+
+    [SerializeField]
+    private bool addTrees = true;
+
+    [SerializeField]
+    private int terrainLayerIndex;
+
+    [Header("Water")]
+    [SerializeField]
+    private GameObject water;
+
+    [SerializeField]
+    private float waterHeight = 0.3f;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +94,7 @@ public class GenerateRandomHeight : MonoBehaviour
 
         GenerateHeights();
         AddTerrainTextures();
+        AddTrees();
     }
 
 
@@ -173,6 +204,77 @@ public class GenerateRandomHeight : MonoBehaviour
         {
             alphamap[i] = alphamap[i] / total;
         }
+    }
+
+    //method that will add tress on the terrain
+    private void AddTrees()
+    {
+        TreePrototype[] trees = new TreePrototype[treeData.Count];
+        
+        for(int i = 0; i < treeData.Count; i++)
+        {
+            trees[i] = new TreePrototype();
+            trees[i].prefab = treeData[i].treePrefab;
+        }
+
+        terrainData.treePrototypes = trees;
+
+        List<TreeInstance> treeInstanceList = new List<TreeInstance>();
+
+        if (addTrees)
+        {
+            for(int z = 0; z < terrainData.size.z; z+= treeSpacing)
+            {
+                for (int x = 0; x < terrainData.size.x; x += treeSpacing)
+                {
+                    for (int treeIndex = 0; treeIndex < trees.Length; treeIndex++)
+                    {
+                        if(treeInstanceList.Count < maxTrees)
+                        {
+                            //getting a height value between 0 and 1
+                            float currentHeight = terrainData.GetHeight(x, z) / terrainData.size.y;
+                        
+                            if(currentHeight >= treeData[treeIndex].minHeight && currentHeight <= treeData[treeIndex].maxHeight)
+                            {
+                                float randomX = (x + Random.Range(-5.0f, 5.0f)) / terrainData.size.x;
+                                float randomZ = (z + Random.Range(-5.0f, 5.0f)) / terrainData.size.z;
+
+                                Vector3 treePosition = new Vector3(randomX * terrainData.size.x, currentHeight * terrainData.size.y, randomZ * terrainData.size.z) + this.transform.position;
+
+                                RaycastHit raycastHit;
+
+                                int layerMask = 1 << terrainLayerIndex;
+
+                                //casting the ray so that the trees are positioned directly on the surface of the terrain
+                                if (Physics.Raycast(treePosition, -Vector3.up, out raycastHit, 100, layerMask) || Physics.Raycast(treePosition, Vector3.up, out raycastHit, 100, layerMask))
+                                {
+                                    float treeDistance = (raycastHit.point.y - this.transform.position.y) / terrainData.size.y;
+
+                                    TreeInstance treeInstance = new TreeInstance();
+
+                                    treeInstance.position = new Vector3(randomX, treeDistance, randomZ); //treeDistance / currentHeight
+                                    treeInstance.rotation = Random.Range(0, 360);
+                                    treeInstance.prototypeIndex = treeIndex;
+                                    treeInstance.color = Color.white;
+                                    treeInstance.lightmapColor = Color.white;
+                                    treeInstance.heightScale = 0.95f;
+                                    treeInstance.widthScale = 0.95f;
+
+                                    treeInstanceList.Add(treeInstance);
+                                }
+                            }
+                        }
+                    }
+
+                    terrainData.treeInstances = treeInstanceList.ToArray();
+                }
+            }
+        }
+    }
+
+    private void AddWater()
+    {
+        GameObject waterGameObject = Instantiate(water, this.transform.position, this.transform.rotation);
     }
 
     private void OnDestroy()
