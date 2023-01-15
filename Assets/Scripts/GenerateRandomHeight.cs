@@ -77,10 +77,30 @@ public class GenerateRandomHeight : MonoBehaviour
     private GameObject water;
 
     [SerializeField]
-    private float waterHeight = 0.3f;
+    private float waterHeight = 0.35f;
 
     [SerializeField]
     private bool addWater = true;
+
+    [Header("Fog")]
+    [SerializeField]
+    private GameObject fog;
+
+    [SerializeField]
+    private float fogHeight = 100f;
+
+    [SerializeField]
+    private bool addFog = true;
+
+    [Header("Rain")]
+    [SerializeField]
+    private GameObject rain;
+
+    [SerializeField]
+    private float rainHeight = 650f;
+
+    [SerializeField]
+    private bool addRain = true;
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +119,8 @@ public class GenerateRandomHeight : MonoBehaviour
         AddTerrainTextures();
         AddTrees();
         AddWater();
+        AddFog();
+        AddRain();
     }
 
 
@@ -283,7 +305,37 @@ public class GenerateRandomHeight : MonoBehaviour
             GameObject waterGameObject = Instantiate(water, this.transform.position, this.transform.rotation);
             waterGameObject.name = "Water";
             waterGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, waterHeight * terrainData.size.y, terrainData.size.z / 2);
-            waterGameObject.transform.localScale = new Vector3(terrainData.size.x, 1, terrainData.size.z);
+            waterGameObject.transform.localScale = new Vector3(terrainData.size.x / 100, 1, terrainData.size.z / 100);
+
+        }
+    }
+
+    private void AddFog()
+    {
+        if (addFog)
+        {
+
+            GameObject fogGameObject = Instantiate(fog, this.transform.position, this.transform.rotation);
+            fogGameObject.name = "Fog";
+            //fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, terrainData.size.x / 10, terrainData.size.z / 2);
+            fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, terrainData.size.x / 3, terrainData.size.z / 2);
+            //fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, 100, terrainData.size.z / 2);
+            fogGameObject.transform.localScale = new Vector3(terrainData.size.x / 100, 1, terrainData.size.z / 100);
+
+        }
+    }
+
+    private void AddRain()
+    {
+        if (addRain)
+        {
+
+            GameObject fogGameObject = Instantiate(rain, this.transform.position, this.transform.rotation);
+            fogGameObject.name = "Rain";
+            fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, rainHeight, terrainData.size.z / 2);
+            fogGameObject.transform.localScale = new Vector3(terrainData.size.x / 16, terrainData.size.x / 111, terrainData.size.z / 25);
+
+
         }
     }
 
