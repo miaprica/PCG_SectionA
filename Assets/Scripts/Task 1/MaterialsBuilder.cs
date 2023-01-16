@@ -10,13 +10,13 @@ public class MaterialsBuilder
     {
 
         Material redMaterial = new Material(Shader.Find("Specular"));
-        redMaterial.color = Color.red;
+        redMaterial.color = new Color32(0, 166, 0, 255);
 
         Material blueMaterial = new Material(Shader.Find("Specular"));
-        blueMaterial.color = Color.blue;
+        blueMaterial.color = new Color32(0, 20, 212, 255);
 
         Material greenMaterial = new Material(Shader.Find("Specular"));
-        greenMaterial.color = Color.green;
+        greenMaterial.color = new Color32(212, 166, 0, 255);
 
         Material yellowMaterial = new Material(Shader.Find("Specular"));
         yellowMaterial.color = Color.yellow;

@@ -32,6 +32,8 @@ public class Cube : MonoBehaviour
     [SerializeField]
     private int submeshFrontIndex = 5;
 
+    //public int submeshIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,13 +99,9 @@ public class Cube : MonoBehaviour
 
         MaterialsBuilder materialsBuilder = new MaterialsBuilder();
 
-        //
-        Material redMaterial = new Material(Shader.Find("Specular"));
-        redMaterial.color = Color.red;
-        //
-
         //meshRenderer.materials = materialsBuilder.MaterialsList().ToArray();
-        meshRenderer.material = redMaterial;
+        meshRenderer.materials = materialsBuilder.MaterialsList().ToArray();
+        //meshRenderer.material = redMaterial;
     }
 
 }

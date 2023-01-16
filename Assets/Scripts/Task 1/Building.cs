@@ -16,9 +16,6 @@ public class Building : MonoBehaviour
     [SerializeField]
     private int buildingDepthSize = 5; //number of cubes that make up the depth of the building (z)
 
-    [SerializeField]
-    private int submeshCount = 6;
-
     //positions
     float x;
     float y;
@@ -31,10 +28,17 @@ public class Building : MonoBehaviour
     {
         this.transform.position = new Vector3(0, 0, 0);
         CreateBuilding(name);
+
+        BoxCollider boxCollider = gameObject.AddComponent<BoxCollider>();
+        boxCollider.center = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        boxCollider.size = new Vector3(gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
     }
 
     private void CreateBuilding(string name)
     {
+        buildingHeightSize = Random.Range(8, 20);
+
+
         name = "Building";
 
         //Vector3 initialisePosition = new Vector3(0,0,-10f);
@@ -44,8 +48,6 @@ public class Building : MonoBehaviour
         y = 0; //y is 0 because we dont want the building to float
         x = Random.Range(0, 62);
         z = Random.Range(0, 75);
-        //x = Random.Range(-50, 0);
-        //z = Random.Range(-50, 30);
         pos = new Vector3(x, y, z);
 
             
@@ -59,27 +61,6 @@ public class Building : MonoBehaviour
 
         //this.transform.rotation = Quaternion.Euler(0, 0, 0);
         this.transform.position = pos;
-
-        ///
-
-        //MeshFilter meshFilter = this.GetComponent<MeshFilter>();
-
-        //MeshBuilder meshBuilder = new MeshBuilder(submeshCount);
-
-
-        //meshFilter.mesh = meshBuilder.CreateMesh();
-
-        //MeshRenderer meshRenderer = this.GetComponent<MeshRenderer>();
-
-        ////MaterialsBuilder materialsBuilder = new MaterialsBuilder();
-
-        ////
-        //Material redMaterial = new Material(Shader.Find("Specular"));
-        //redMaterial.color = Color.red;
-        ////
-
-        ////meshRenderer.materials = materialsBuilder.MaterialsList().ToArray();
-        //meshRenderer.material = redMaterial;
 
     }
 

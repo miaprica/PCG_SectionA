@@ -10,6 +10,11 @@ public class Base : MonoBehaviour
     [SerializeField]
     private int baseDepthSize = 25; // number of cubes
 
+    [SerializeField]
+    private Vector3 colliderPosition;
+
+    [SerializeField]
+    private Vector3 colliderScale;
 
     // Start is called before the first frame update
     void Start()
@@ -27,13 +32,17 @@ public class Base : MonoBehaviour
 
         float cubeDepth = 0;
 
+        //adding a box collider for car controller
+        BoxCollider boxCollider = gameObject.AddComponent<BoxCollider>();
+        boxCollider.center = new Vector3(40, 0, 44);
+        boxCollider.size = new Vector3(81, 1, 90);
+
 
         for (int j = 0; j < baseDepthSize; j++)
         {
             for (int i = 0; i < baseLengthSize; i++)
             {
                 GameObject cube = new GameObject();
-                //name = "Cube " + j + "-" + i;
                 cube.name = "Cube " + j + "-" + i;
                 cube.AddComponent<Cube>();
                 cube.transform.position = nextPosition;
@@ -41,6 +50,7 @@ public class Base : MonoBehaviour
 
                 nextPosition.x = cube.GetComponent<Cube>().CubeSize().x + nextPosition.x;
                 cubeDepth = cube.GetComponent<Cube>().CubeSize().z;
+
             }
 
             nextPosition.z = cubeDepth + nextPosition.z;

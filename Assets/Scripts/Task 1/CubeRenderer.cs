@@ -17,6 +17,8 @@ public class CubeRenderer : MonoBehaviour
     [SerializeField]
     private Vector3 initialisePosition = Vector3.zero;
 
+    //private int submeshIndex;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,11 +29,13 @@ public class CubeRenderer : MonoBehaviour
     //function for initialising a building//
     public void initialiseCube(int newbuildingLengthSize, int newbuildingHeightSize, int newbuildingDepthSize, Vector3 newInitialisePosition)
     {
+
         buildingLengthSize = newbuildingLengthSize;
         buildingHeightSize = newbuildingHeightSize;
         buildingDepthSize = newbuildingDepthSize;
         initialisePosition = newInitialisePosition;
         RenderCube();
+
     }
 
 
@@ -57,6 +61,7 @@ public class CubeRenderer : MonoBehaviour
                     cube.transform.position = nextPosition;
                     cube.transform.parent = this.transform;
 
+                    //cube.GetComponent<Cube>().submeshIndex = submeshIndex;
                     nextPosition.x = cube.GetComponent<Cube>().CubeSize().x + nextPosition.x;
                     cubeHeight = cube.GetComponent<Cube>().CubeSize().y;
                     cubeDepth = cube.GetComponent<Cube>().CubeSize().z;
