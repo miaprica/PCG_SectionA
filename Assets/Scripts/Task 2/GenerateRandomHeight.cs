@@ -102,6 +102,9 @@ public class GenerateRandomHeight : MonoBehaviour
     [SerializeField]
     private bool addRain = true;
 
+    Vector3 fogRandomPosition;
+    Vector3 rainRandomPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -314,12 +317,18 @@ public class GenerateRandomHeight : MonoBehaviour
     {
         if (addFog)
         {
+            //getting a random range of the fog height
+            fogHeight = Random.Range(250, 400);
+
+            //we want the fog to cover all the terrain, which is the reason only the height value is determined by a random range 
+            fogRandomPosition = new Vector3(terrainData.size.x / 2, fogHeight, terrainData.size.z / 2);
+
+            //if we wanted the fog to spawn anywhere on the terrain, on a completely random position, the following code would be:
+            //fogRandomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ);
 
             GameObject fogGameObject = Instantiate(fog, this.transform.position, this.transform.rotation);
             fogGameObject.name = "Fog";
-            //fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, terrainData.size.x / 10, terrainData.size.z / 2);
-            fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, terrainData.size.x / 3, terrainData.size.z / 2);
-            //fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, 100, terrainData.size.z / 2);
+            fogGameObject.transform.position = this.transform.position + fogRandomPosition; //setting the fog height to a random height on the terrain
             fogGameObject.transform.localScale = new Vector3(terrainData.size.x / 100, 1, terrainData.size.z / 100);
 
         }
@@ -329,12 +338,20 @@ public class GenerateRandomHeight : MonoBehaviour
     {
         if (addRain)
         {
+            //getting a random range of the rain height
+            rainHeight = Random.Range(terrainData.size.x, 1500);
 
-            GameObject fogGameObject = Instantiate(rain, this.transform.position, this.transform.rotation);
-            fogGameObject.name = "Rain";
-            fogGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, rainHeight, terrainData.size.z / 2);
-            fogGameObject.transform.localScale = new Vector3(terrainData.size.x / 16, terrainData.size.x / 111, terrainData.size.z / 25);
+            //we want the rain to cover all the terrain, which is the reason only the height value is determined by a random range 
+            rainRandomPosition = new Vector3(terrainData.size.x / 2, rainHeight, terrainData.size.z / 2);
 
+            //if we wanted the fog to spawn anywhere on the terrain, on a completely random position, the following code would be:
+            //rainRandomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), Random.Range(minZ, maxZ);
+
+            GameObject rainGameObject = Instantiate(rain, this.transform.position, this.transform.rotation);
+            rainGameObject.name = "Rain";
+            //rainGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, rainHeight, terrainData.size.z / 2);
+            rainGameObject.transform.position = this.transform.position + rainRandomPosition; //setting the rain height to a random height on the terrain
+            rainGameObject.transform.localScale = new Vector3(terrainData.size.x / 16, terrainData.size.x / 30, terrainData.size.z / 25);
 
         }
     }
